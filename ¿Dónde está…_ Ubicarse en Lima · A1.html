@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>¿Dónde está…? Ubicarse en Lima · A1</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#faf6ef;--card:#fff;--tx:#2a2420;--mu:#7a6e64;--ac:#c2410c;--ok:#15803d;--okb:#dcfce7;--no:#b91c1c;--nob:#fee2e2;--bd:#e7ddd0}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1814;--card:#28221d;--tx:#f3ece3;--mu:#b3a595;--ac:#fb923c;--ok:#4ade80;--okb:#14532d;--no:#f87171;--nob:#5b1a1a;--bd:#3d342b}}
+:root[data-theme="dark"]{--bg:#1c1814;--card:#28221d;--tx:#f3ece3;--mu:#b3a595;--ac:#fb923c;--ok:#4ade80;--okb:#14532d;--no:#f87171;--nob:#5b1a1a;--bd:#3d342b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.w{max-width:720px;margin:0 auto;padding:16px}
+h1{font:700 1.5rem Georgia,serif;margin:4px 0}
+.sub{color:var(--mu);margin:0 0 12px}
+nav{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px}
+nav button{flex:none;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:20px;padding:8px 14px;font-size:.9rem;cursor:pointer}
+nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:12px 0}
+.ins{color:var(--mu);font-size:.9rem;margin:0 0 8px}
+.en{color:var(--mu);font-size:.85rem;font-style:italic}
+.sc{font-weight:600;color:var(--ac);margin:8px 0}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+td,th{border:1px solid var(--bd);padding:7px;text-align:left;vertical-align:top}
+th{background:var(--bg)}
+.q{font-size:1.05rem;margin:0 0 8px}
+.bl{display:inline-block;min-width:70px;border-bottom:2px solid var(--ac);text-align:center;font-weight:700;color:var(--ac)}
+.o{display:flex;flex-wrap:wrap;gap:8px}
+.o button{border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:10px;padding:9px 14px;font-size:1rem;cursor:pointer}
+.o button.ok{background:var(--okb);border-color:var(--ok);color:var(--ok)}
+.o button.no{background:var(--nob);border-color:var(--no);color:var(--no)}
+.fb{margin-top:8px;font-size:.88rem;min-height:1.2em}
+svg{width:100%;max-width:300px;display:block;margin:0 auto 8px;background:var(--bg);border-radius:10px}
+.d p{margin:6px 0}select{font-size:1rem;padding:4px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx)}
+select.ok{background:var(--okb);border-color:var(--ok)}select.no{background:var(--nob);border-color:var(--no)}
+.b{border:0;background:var(--ac);color:#fff;border-radius:10px;padding:10px 18px;font-size:1rem;cursor:pointer;margin-top:8px}
+.r{display:none;margin-top:6px;padding:8px;background:var(--bg);border-radius:8px}
+.sh .r{display:block}
+.cq{cursor:pointer}
+.vg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.vg2{grid-template-columns:repeat(2,1fr)}
+.vc{border:1px solid var(--bd);border-radius:10px;padding:10px 6px;text-align:center;cursor:pointer;background:var(--bg);font-size:.92rem}.vc .e{font-size:1.9rem}
+.o button.sp{padding:4px 10px}.ag b{color:var(--ac)}textarea{width:100%;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);padding:8px;font:inherit}
+label.ck{display:block;margin:6px 0}
+</style></head><body><div class="w">
+<h1>¿Dónde está…? Ubicarse en Lima</h1>
+<p class="sub">A1 · Ser vs. estar · Prepositions of place<br><span class="en">Tap an answer. Green = correct.</span></p>
+<nav id="nav"></nav><div id="app"></div></div>
+<script>
+const $=s=>document.querySelector(s);
+const SEC=['Plan','1 · Calentar','2 · Reglas','3 · Ser/Estar','4 · Imágenes','5 · Diálogos','6 · Hablar'];
+let cur=0,score={};
+const SE=[
+['¿Dónde ___ (tú) en tus vacaciones?','estás','Where are you on your vacation? → location','eres/estás/estoy/está'],
+['Yo ___ en Cusco de vacaciones.','estoy','I am in Cusco on vacation. → location','soy/estoy/es/está'],
+['¿Cómo ___ (tú) en tu trabajo?','estás','How are you at work? → feeling / state','eres/estás/estoy/está'],
+['En mi trabajo, yo ___ muy cansado.','estoy','At work I am very tired. → state','soy/estoy/es/está'],
+['¿De dónde ___ (tú)?','eres','Where are you from? → origin','eres/estás/es/está'],
+['Yo ___ de Canadá.','soy','I am from Canada. → origin','soy/estoy/es/está'],
+['Mi oficina ___ en el centro de Lima.','está','My office is downtown in Lima. → location','es/está/son/están'],
+['Mi trabajo ___ interesante.','es','My job is interesting. → description','es/está/son/están'],
+['Lima ___ una ciudad grande y bonita.','es','Lima is a big, beautiful city. → description','es/está/son/están'],
+['Lima ___ en la costa de Perú.','está','Lima is on the coast of Peru. → location','es/está/son/están'],
+['Mi hotel ___ moderno y cómodo.','es','My hotel is modern and comfortable. → description','es/está/son/están'],
+['Mi hotel ___ cerca de la playa.','está','My hotel is near the beach. → location','es/está/son/están'],
+['Mis amigos ___ de vacaciones en Máncora.','están','My friends are on vacation in Máncora. → location','son/están/es/está'],
+['Mis amigos ___ muy simpáticos.','son','My friends are very nice. → description','son/están/es/está']];
+const T='<rect x="70" y="62" width="120" height="10" fill="#a0724a"/><rect x="78" y="72" width="8" height="45" fill="#a0724a"/><rect x="174" y="72" width="8" height="45" fill="#a0724a"/>';
+const E=(t,x,y,s)=>`<text x="${x}" y="${y}" font-size="${s}">${t}</text>`;
+const IM=[
+[T+E('🐱',112,114,34),'El gato está ___ de la mesa.','debajo','The cat is under the table.','debajo/encima/detrás/dentro'],
+[T+E('📖',112,58,30),'El libro está ___ de la mesa.','encima','The book is on top of the table.','debajo/encima/delante/enfrente'],
+[E('🐶',45,95,56)+E('🚗',150,95,56),'El perro está ___ del carro.','al lado','The dog is next to the car.','al lado/encima/dentro/debajo'],
+[E('🏦',20,95,50)+E('💊',108,95,50)+E('☕',195,95,50),'La farmacia 💊 está ___ el banco y el café.','entre','The pharmacy is between the bank and the café.','entre/detrás/enfrente/dentro'],
+['<rect x="80" y="40" width="100" height="80" rx="6" fill="#d9b382" opacity=".5" stroke="#a0724a" stroke-width="3"/>'+E('⚽',108,105,44),'La pelota está ___ de la caja.','dentro','The ball is inside the box.','dentro/encima/debajo/delante'],
+[E('🧒',125,85,40)+E('🌳',70,118,100),'El niño está ___ del árbol.','detrás','The boy is behind the tree.','detrás/delante/encima/enfrente'],
+[E('🏨',75,92,70)+E('🚕',115,122,52),'El taxi está ___ del hotel.','delante','The taxi is in front of the hotel.','delante/detrás/dentro/debajo'],
+[E('🏛️',10,95,56)+'<rect x="100" y="0" width="50" height="130" fill="#777"/><path d="M125 0V130" stroke="#fff" stroke-width="3" stroke-dasharray="10 8"/>'+E('⛲',170,95,56),'El museo está ___ de la plaza.','enfrente','The museum is across from the square.','enfrente/dentro/debajo/al lado']];
+const sh=a=>a.sort(()=>Math.random()-.5);
+const M={se:SE,im:IM};
+const CV=[['¿Dónde estás en tus vacaciones?','Where are you on your vacation?','Estoy en Cusco con mi familia.'],
+['¿Cómo estás en tu trabajo?','How are you at work?','Estoy bien, pero un poco cansado/a.'],
+['¿De dónde eres?','Where are you from?','Soy de Canadá.'],
+['¿Cómo es tu ciudad?','What is your city like?','Mi ciudad es grande y tranquila.'],
+['¿Dónde está tu casa?','Where is your house?','Mi casa está cerca del parque.'],
+['¿Cómo es tu hotel favorito?','What is your favorite hotel like?','Es moderno y está cerca de la playa.'],
+['¿Dónde están tus amigos ahora?','Where are your friends now?','Están en el trabajo.'],
+['¿Qué es Lima para ti?','What is Lima for you?','Lima es una ciudad con mucha comida y cultura.']];
+
+function esc(t){return t.replace(/<span class="en">.*?<\/span>/g,'').replace(/<[^>]*>/g,'').replace(/"/g,'&quot;')}
+function say(t){if(!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/\([^)]*\)/g,'').replace(/<[^>]*>/g,''));const vs=speechSynthesis.getVoices(),L=['es-PE','es-MX','es-419','es-CO','es-US','es-AR','es-CL'];let v;for(const l of L){v=vs.find(x=>x.lang.replace('_','-')==l);if(v)break}
+if(!v)v=vs.find(x=>x.lang.startsWith('es')&&x.lang!='es-ES')||vs.find(x=>x.lang.startsWith('es'));u.lang=v?v.lang:'es-MX';if(v)u.voice=v;u.rate=.85;speechSynthesis.speak(u)}
+if(window.speechSynthesis)speechSynthesis.onvoiceschanged=()=>{};
+function sp(t){return `<button class="sp" style="border:1px solid var(--bd);background:var(--bg);border-radius:8px;cursor:pointer" data-t="${esc(t)}" onclick="say(this.dataset.t)">🔊</button>`}
+function chips(l){return '<div class="o">'+l.map(t=>`<button data-t="${esc(t)}" onclick="say(this.dataset.t)">🔊 ${t}</button>`).join('')+'</div>'}
+function vc(el,t){el.classList.toggle('sh');say(t)}
+const V=[['🏦','el banco','the bank'],['💊','la farmacia','the pharmacy'],['🏨','el hotel','the hotel'],['🍽️','el restaurante','the restaurant'],['🛒','el supermercado','the supermarket'],['🏪','el mercado','the market'],['⛪','la iglesia','the church'],['🏛️','el museo','the museum'],['🌳','el parque','the park'],['🏖️','la playa','the beach'],['✈️','el aeropuerto','the airport'],['🚻','el baño','the restroom']];
+const P=[['en','El hotel está en Miraflores.','in / at'],['cerca de','La farmacia está cerca del parque.','near'],['lejos de','El aeropuerto está lejos del centro.','far from'],['al lado de','El banco está al lado de la iglesia.','next to'],['enfrente de','El museo está enfrente de la plaza.','across from'],['entre','El café está entre el banco y el hotel.','between'],['detrás de','El baño está detrás del restaurante.','behind'],['delante de','El taxi está delante del hotel.','in front of'],['encima de','El libro está encima de la mesa.','on top of'],['debajo de','El gato está debajo de la mesa.','under'],['dentro de','La pelota está dentro de la caja.','inside'],['a la derecha de','El banco está a la derecha de la iglesia.','to the right of']];
+function vocab(){return `<div class="c"><b>Lugares de la ciudad</b><p class="ins">Toca una tarjeta: escucha y mira el inglés.<br><span class="en">Tap a card: listen and see the English.</span></p><div class="vg">${V.map(([e,w,en])=>`<div class="vc" onclick="vc(this,'${w}')"><div class="e">${e}</div><b>${w}</b><div class="r en">${en}</div></div>`).join('')}</div></div>
+<div class="c"><b>Preposiciones de lugar</b><p class="ins">Toca para ver un ejemplo y escucharlo.<br><span class="en">Tap to see an example and hear it.</span></p><div class="vg vg2">${P.map(([w,ex,en])=>`<div class="vc" onclick="vc(this,'${ex}')"><b>${w}</b><div class="r">${ex}<br><span class="en">${en}</span></div></div>`).join('')}</div><p class="en">de + el = del</p></div>`}
+const AG=[['5′','Calentamiento','Warm-up','Escucha las preguntas, toca para ver la respuesta modelo y responde en voz alta.<br><span class="en">Listen to the questions, tap for a model answer, and reply out loud.</span>',1],
+['10′','Vocabulario y reglas','Vocabulary & rules','Toca las tarjetas, escucha y repite. Lee la regla de estar y el contraste ser vs. estar.<br><span class="en">Tap the cards, listen and repeat. Read the estar rule and ser vs. estar.</span>',2],
+['12′','Ser o estar','Ser or estar','14 oraciones con contexto e imagen: ubicación, estado, origen y descripción.<br><span class="en">14 sentences with context and picture: location, state, origin and description.</span>',3],
+['8′','Imágenes','Pictures','Lee el contexto, mira la imagen y elige la preposición.<br><span class="en">Read the context, look at the picture and choose the preposition.</span>',4],
+['15′','Diálogos: estoy perdida y cómo llego','Dialogues: I am lost and how do I get there','Completa 3 diálogos con ser y estar y escúchalos.<br><span class="en">Complete 3 dialogues with ser and estar and listen to them.</span>',5],
+['10′','Conversación y juego de roles','Conversation & role play','Pregunta a tu profesora y practica 3 situaciones en Lima.<br><span class="en">Ask your teacher and practice 3 situations in Lima.</span>',6]];
+function plan(){let h=`<div class="c"><b>Objetivos / Goals</b><ul><li>Preguntar y decir dónde está un lugar.<br><span class="en">Ask and say where a place is.</span></li><li>Usar estar + preposiciones de lugar.<br><span class="en">Use estar + prepositions of place.</span></li><li>Diferenciar ser y estar con lugares.<br><span class="en">Tell the difference between ser and estar with places.</span></li><li>Pedir y dar direcciones simples en Lima.<br><span class="en">Ask for and give simple directions in Lima.</span></li></ul></div><div class="c"><b>Plan de 60 minutos</b> <p class="ins">Toca cada bloque. 🔊 = audio con voz latina (depende de tu dispositivo).<br><span class="en">Tap each block. 🔊 = Latin American voice audio (depends on your device).</span></p></div>`;
+AG.forEach(([m,t,en,d,i])=>{h+=`<div class="c cq ag" onclick="this.classList.toggle('sh')"><b>${m}</b> · ${t} <span class="en">${en}</span><div class="r">${d}<br><button class="b" onclick="event.stopPropagation();go(${i})">Ir →</button></div></div>`});$('#app').innerHTML=h}
+function cards(l,intro){let h=`<div class="c"><p class="ins">${intro}</p></div>`;l.forEach(([q,e,a])=>{h+=`<div class="c cq" data-q="${esc(q)}" data-a="${esc(a)}" onclick="this.classList.toggle('sh');say(this.classList.contains('sh')?this.dataset.a:this.dataset.q)"><b>${q}</b> ${sp(q)}<br><span class="en">${e}</span><div class="r">💬 ${a}</div></div>`});return h}
+const WU=[['¿Cómo estás hoy?','How are you today?','Estoy bien, gracias. ¿Y tú?'],['¿Dónde estás ahora?','Where are you now?','Estoy en mi casa.'],['¿De dónde eres?','Where are you from?','Soy de Canadá. ¿Y tú?']];
+const RP=[['Situación 1: Estás en la Plaza de Armas y quieres ir a la Catedral.','You are at the Plaza de Armas and want to go to the Cathedral.','Perdón, ¿me puede decir dónde está la Catedral? — Está al lado de la plaza, a dos cuadras de aquí.'],
+['Situación 2: Estás en tu hotel en Miraflores y buscas una farmacia.','You are at your hotel in Miraflores and need a pharmacy.','Disculpe, ¿dónde está la farmacia? — Está cerca del Parque Kennedy, al lado del banco.'],
+['Situación 3: Estás en el aeropuerto, estás perdido y buscas los baños.','You are at the airport, you are lost, and you need the restrooms.','Perdón, estoy perdido. ¿Me puede decir dónde están los baños? — Están a la derecha, detrás del café.']];
+function warm(){$('#app').innerHTML=cards(WU,'<b>Calentamiento.</b> Toca 🔊 para escuchar, responde en voz alta y toca la tarjeta para ver una respuesta modelo.<br><span class="en">Warm-up. Tap 🔊 to listen, answer out loud, and tap the card for a model answer.</span>')}
+function conv(){$('#app').innerHTML=cards(CV,'<b>Conversación.</b> Pregunta a tu profesora. Toca para ver una respuesta modelo.<br><span class="en">Conversation. Ask your teacher. Tap for a model answer.</span>')+cards(RP,'<b>Juego de roles.</b> Una persona es turista y la otra es local. Después cambien de rol.<br><span class="en">Role play. One is the tourist, the other is the local. Then switch roles.</span>')}
+
+const CS=[['🏖️','Tu amiga te llama durante tus vacaciones.','Your friend calls you during your vacation.'],['🏔️','Respondes: estás en Cusco con tu familia.','You answer: you are in Cusco with your family.'],['💼','Tu amigo quiere saber si te sientes bien en la oficina.','Your friend wants to know if you feel good at the office.'],['😴','Son las 6 de la tarde y trabajaste mucho.','It is 6 p.m. and you worked a lot.'],['🧳','Conoces a un turista en el aeropuerto de Lima.','You meet a tourist at the Lima airport.'],['🇨🇦','El turista te responde.','The tourist answers you.'],['🏢','Explicas dónde trabajas.','You explain where you work.'],['💻','Hablas de tu trabajo con un amigo.','You talk about your job with a friend.'],['🌆','Describes Lima a tu familia.','You describe Lima to your family.'],['🗺️','Muestras un mapa de Perú.','You show a map of Peru.'],['🏨','Escribes una reseña del hotel.','You write a hotel review.'],['📍','Un amigo pregunta dónde queda tu hotel.','A friend asks where your hotel is.'],['🌊','Hoy tus amigos viajan y no están en casa.','Today your friends are traveling and are not home.'],['😊','Hablas de tus amigos con tu profesora.','You talk about your friends with your teacher.']];
+const CI=[['Buscas a tu gato en la sala.','You are looking for your cat in the living room.'],['Tu libro de español no está en la mochila.','Your Spanish book is not in the backpack.'],['Estás en el estacionamiento del hotel.','You are in the hotel parking lot.'],['Caminas por la avenida Larco en Miraflores.','You walk along Larco Avenue in Miraflores.'],['Un niño juega en el jardín.','A boy plays in the garden.'],['Juegas a las escondidas con un niño en el parque.','You play hide and seek with a boy in the park.'],['Llegas al hotel en la noche.','You arrive at the hotel at night.'],['Estás en el centro de Lima con un mapa.','You are downtown with a map.']];
+function ctx(k,i){if(k=='se'){const[e,a,b]=CS[i];return `<div style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><span style="font-size:2.4rem">${e}</span><span>${a}<br><span class="en">${b}</span></span></div>`}
+if(k=='im'){const[a,b]=CI[i];return `<p style="margin:0 0 6px">${a}<br><span class="en">${b}</span></p>`}return ''}
+const DG=[['1 · Estoy perdida','🧭🏨','Estás en Miraflores y no encuentras tu hotel. Hablas con una señora en la calle.','You are in Miraflores and cannot find your hotel. You talk to a lady on the street.',[
+['🧳 Turista','Perdón, señora. {Estoy|Soy|Estás} perdida.','Excuse me, ma’am. I am lost.'],
+['👩 Señora','No hay problema. ¿Cuál {es|está|son} el nombre de tu hotel?','No problem. What is the name of your hotel?'],
+['🧳 Turista','El nombre del hotel {es|está} Casa Verde.','The name of the hotel is Casa Verde.'],
+['👩 Señora','Ah, Casa Verde {está|es} muy cerca. {Está|Es} en la avenida Larco, enfrente del parque.','Ah, Casa Verde is very close. It is on Larco Avenue, across from the park.'],
+['🧳 Turista','¿{Está|Es} lejos de aquí?','Is it far from here?'],
+['👩 Señora','No, {está|es} a dos cuadras. El hotel {es|está} grande y blanco.','No, it is two blocks away. The hotel is big and white.'],
+['🧳 Turista','¡Muchas gracias! Usted {es|está} muy amable.','Thank you very much! You are very kind.']]],
+['2 · ¿Cómo llego al museo?','🌳🏛️','Estás en el Parque Kennedy. Un amigo peruano te explica cómo llegar al museo.','You are at Kennedy Park. A Peruvian friend explains how to get to the museum.',[
+['🙋 Tú','Perdona, ¿dónde {está|es|están} el museo?','Excuse me, where is the museum?'],
+['🧑 Amigo','El museo {está|es} en el centro y {es|está} muy famoso.','The museum is downtown and it is very famous.'],
+['🙋 Tú','Ahora {estoy|soy} en el Parque Kennedy. ¿Cómo llego?','Right now I am at Kennedy Park. How do I get there?'],
+['🧑 Amigo','Sigue derecho por la avenida Larco y gira a la derecha. El museo {está|es} al lado de un parque.','Go straight on Larco Avenue and turn right. The museum is next to a park.'],
+['🙋 Tú','¿{Está|Es} lejos?','Is it far?'],
+['🧑 Amigo','No, {está|es} a diez minutos caminando.','No, it is ten minutes on foot.'],
+['🙋 Tú','¡Gracias! Mis amigos {están|son} en el museo ahora.','Thanks! My friends are at the museum now.']]],
+['3 · En el aeropuerto','✈️🚕','Llegas al aeropuerto de Lima. Buscas los baños y la parada de taxis.','You arrive at the Lima airport. You look for the restrooms and the taxi stop.',[
+['🧳 Turista','Disculpe, ¿dónde {están|está|son} los baños?','Excuse me, where are the restrooms?'],
+['💁 Empleado','Los baños {están|son} a la izquierda, detrás de la cafetería.','The restrooms are on the left, behind the cafeteria.'],
+['🧳 Turista','Gracias. Ahora {estoy|soy} un poco perdido. ¿Dónde {está|es} la parada de taxis?','Thanks. I am a little lost now. Where is the taxi stop?'],
+['💁 Empleado','La parada {está|es} afuera, enfrente de la puerta B.','The stop is outside, across from gate B.'],
+['🧳 Turista','¿Los taxis oficiales {son|están} amarillos?','Are the official taxis yellow?'],
+['💁 Empleado','Sí, {son|están} amarillos. ¡Bienvenido a Lima!','Yes, they are yellow. Welcome to Lima!']]]];
+function dialogs(){let h=`<div class="c"><p class="ins"><b>Completa los diálogos con ser y estar.</b> Elige la opción en cada espacio y toca Comprobar.<br><span class="en">Complete the dialogues with ser and estar. Choose the option in each blank and tap Check.</span></p></div>`;
+DG.forEach(([t,em,c,ce,L],d)=>{h+=`<div class="c d" id="dg${d}"><b>${t}</b><div style="font-size:2.4rem">${em}</div><p>${c}<br><span class="en">${ce}</span></p>`+L.map(([w,tx,en])=>`<p><b>${w}:</b> ${tx.replace(/\{(.+?)\}/g,(m,a)=>{const o=a.split('|');return `<select data-a="${o[0]}"><option value="">…</option>${sh([...o]).map(x=>`<option>${x}</option>`).join('')}</select>`})}<br><span class="en">${en}</span></p>`).join('')+`<button class="b" onclick="chk(${d})">Comprobar / Check</button> <button class="b" onclick="hear(${d})">🔊 Escuchar</button><div class="sc" id="dr${d}"></div></div>`});$('#app').innerHTML=h}
+function chk(d){let ok=0,n=0;document.querySelectorAll('#dg'+d+' select').forEach(x=>{n++;const r=x.value==x.dataset.a;x.className=r?'ok':'no';if(r)ok++});$('#dr'+d).textContent=`${ok} / ${n} ${ok==n?'🎉 ¡Excelente!':'— corrige los rojos / fix the red ones'}`}
+function hear(d){say(DG[d][4].map(l=>l[1].replace(/\{([^}|]+)[^}]*\}/g,'$1')).join(' '))}
+function nav(){$('#nav').innerHTML=SEC.map((s,i)=>`<button class="${i==cur?'on':''}" onclick="go(${i})">${s}</button>`).join('')}
+function go(i){cur=i;nav();[plan,warm,rules,quizSE,quizIM,dialogs,conv][i]();scrollTo(0,0)}
+function sc(k,n){return `<div class="sc" id="sc${k}">Puntos / Score: ${score[k]||0} / ${n}</div>`}
+function rules(){$('#app').innerHTML=`${vocab()}<div class="c"><b>ESTAR = ¿Dónde? / ¿Cómo estás?</b><p class="en">Use estar for location and for how someone feels (state).</p>
+<table><tr><th>yo</th><td><b>estoy</b></td><th>nosotros</th><td><b>estamos</b></td></tr><tr><th>tú</th><td><b>estás</b></td><th>ustedes</th><td><b>están</b></td></tr><tr><th>él/ella/usted</th><td><b>está</b></td><th>ellos/ellas</th><td><b>están</b></td></tr></table></div>
+<div class="c"><b>SER vs. ESTAR</b><table><tr><th>SER</th><th>ESTAR</th></tr>
+<tr><td>Origen: <i>Soy de Canadá.</i><br><span class="en">origin</span></td><td>Ubicación: <i>Estoy en Cusco.</i><br><span class="en">location</span></td></tr>
+<tr><td>Descripción: <i>Lima es grande.</i><br><span class="en">description</span></td><td>Estado: <i>Estoy cansado.</i><br><span class="en">feeling / state</span></td></tr>
+<tr><td>Identidad: <i>Es un museo.</i><br><span class="en">identity</span></td><td>Lugar: <i>El museo está en Barranco.</i><br><span class="en">where it is</span></td></tr>
+<tr><td>¿De dónde eres? ¿Cómo es?</td><td>¿Dónde estás? ¿Cómo estás?</td></tr></table>
+<p class="en">Easy rule: What is it / what is it like? → ser. Where is it / how is it now? → estar.</p></div>
+
+<button class="b" onclick="go(3)">Practicar →</button>`}
+function quiz(k,items,head,ins){score[k]=0;let h=`<div class="c"><p class="ins">${ins}</p></div>`+head+sc(k,items.length);
+items.forEach((it,i)=>{const[svg,q,a,en,o]=k=='im'?it:[null,...it];
+h+=`<div class="c" id="${k}${i}">${ctx(k,i)}${svg?`<svg viewBox="0 0 260 130">${svg}</svg>`:''}<p class="q">${q.replace('___','<span class="bl">&nbsp;</span>')} ${k=='se'||k=='im'?sp(q.replace('___','…')):''}</p><div class="o">${o.split('/').map(x=>`<button onclick="pick('${k}',${i},this,'${a}',${items.length})">${x}</button>`).join('')}</div><div class="fb"></div></div>`});
+$('#app').innerHTML=h}
+function pick(k,i,b,a,n){const c=$('#'+k+i);if(c.dataset.done)return;const it=M[k][i];const en=k=='im'?it[3]:it[2];
+if(k=='sit'||k=='loc')say(b.textContent);if(b.textContent==a){b.classList.add('ok');c.dataset.done=1;if(k=='se'||k=='im')say(it[k=='im'?1:0].replace('___',a));const bl=c.querySelector('.bl');if(bl)bl.textContent=a;
+if(!c.dataset.err){score[k]++;$('#sc'+k).textContent=`Puntos / Score: ${score[k]} / ${n}`}
+c.querySelector('.fb').innerHTML=`✅ <span class="en">${en}</span>`}
+else{b.classList.add('no');c.dataset.err=1;c.querySelector('.fb').textContent='❌ Intenta otra vez / Try again'}}
+function quizSE(){quiz('se',SE,'','<b>Completa con ser o estar.</b> Mira la pregunta y elige la forma correcta.<br><span class="en">Complete with ser or estar. Read the sentence and choose the correct form.</span>')}
+function quizIM(){quiz('im',IM,'','<b>Mira la imagen y completa.</b><br><span class="en">Look at the picture and complete the sentence.</span>')}
+go(0);
+</script></body></html>
